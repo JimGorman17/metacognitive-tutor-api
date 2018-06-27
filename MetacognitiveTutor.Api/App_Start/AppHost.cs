@@ -37,15 +37,17 @@ namespace MetacognitiveTutor.Api.App_Start
 			  .Add<Hello>("/hello")
 			  .Add<Hello>("/hello/{Name*}");
 
-			//Uncomment to change the default ServiceStack configuration
-			//SetConfig(new EndpointHostConfig {
-			//});
+            Plugins.Add(new ServiceStack.ServiceInterface.Cors.CorsFeature());
 
-			//Enable Authentication
-			//ConfigureAuth(container);
+            //Uncomment to change the default ServiceStack configuration
+            //SetConfig(new EndpointHostConfig {
+            //});
 
-			//Register all your dependencies
-			container.Register(new TodoRepository());			
+            //Enable Authentication
+            //ConfigureAuth(container);
+
+            //Register all your dependencies
+            container.Register(new TodoRepository());			
 		}
 
 		/* Uncomment to enable ServiceStack Authentication and CustomUserSession
