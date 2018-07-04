@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MetacognitiveTutor.Api.Api
+namespace MetacognitiveTutor.Api.Services
 {
     public class HttpStatusResult
     {

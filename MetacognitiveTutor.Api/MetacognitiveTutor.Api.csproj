@@ -105,9 +105,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\ErrorLogService.cs" />
-    <Compile Include="Api\HttpStatusResult.cs" />
-    <Compile Include="Api\UserService.cs" />
+    <Compile Include="Services\ErrorLogService.cs" />
+    <Compile Include="Services\HttpStatusResult.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="App_Start\AppHost.cs" />
     <Compile Include="App_Start\PageBase.cs" />
     <Compile Include="App_Start\WebServiceExamples.cs" />

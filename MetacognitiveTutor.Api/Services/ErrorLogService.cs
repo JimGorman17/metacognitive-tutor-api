@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Net;
 using MetacognitiveTutor.DataLayer.Models;
 using MetacognitiveTutor.DataLayer.Repositories;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
-namespace MetacognitiveTutor.Api.Api
+namespace MetacognitiveTutor.Api.Services
 {
     public class ErrorLogService : Service
     {
