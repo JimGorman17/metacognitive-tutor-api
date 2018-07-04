@@ -9,9 +9,10 @@ namespace MetacognitiveTutor.DataLayer.Models
     public class ErrorLog : IEntity
     {
         public int Id { get; set; }
+        public string Application { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
-        public DateTime CreateDateUtc { get; set; }
+        // [ResultColumn] public DateTime CreateDateUtc { get; set; } // Not a UI concern for now.
         public int? UserId { get; set; }
 
         [Ignore]

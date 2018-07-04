@@ -23,6 +23,7 @@ GO
 
 CREATE TABLE [dbo].[ErrorLogs](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Application] [nvarchar](100) NOT NULL,
 	[Message] [nvarchar](max) NULL,
 	[StackTrace] [nvarchar](max) NULL,
 	[CreateDateUtc] [datetime2](7) NOT NULL,

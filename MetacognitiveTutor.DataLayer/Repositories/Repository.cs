@@ -7,7 +7,7 @@ using PetaPoco;
 
 namespace MetacognitiveTutor.DataLayer.Repositories
 {
-    public abstract class Repository<T> : IRepository<T> where T : IEntity
+    public class Repository<T> : IRepository<T> where T : IEntity
     {
         public Database Database { get; set; }
 

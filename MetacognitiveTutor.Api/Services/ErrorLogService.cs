@@ -11,9 +11,10 @@ namespace MetacognitiveTutor.Api.Services
         public Repository<ErrorLog> ErrorLogRepository { get; set; }
         public UserRepository UserRepository { get; set; }
 
-        [Route("/ErrorLog/Create")]
+        [Route("/ErrorLog/Create", "POST")]
         public class ErrorLogCreateRequest : IReturnVoid
         {
+            public string Application { get; set; }
             public string Provider { get; set; }
             public string ProviderId { get; set; }
             public string ErrorMessage { get; set; }
@@ -39,9 +40,9 @@ namespace MetacognitiveTutor.Api.Services
 
             ErrorLogRepository.Add(new ErrorLog
             {
+                Application = request.Application,
                 Message = request.ErrorMessage,
                 StackTrace = request.StackTrace,
-                CreateDateUtc = DateTime.UtcNow,
                 UserId = 0 < existingUser.Id ? existingUser.Id : (int?)null
             });
         }
