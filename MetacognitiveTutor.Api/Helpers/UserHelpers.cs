@@ -8,8 +8,8 @@ namespace MetacognitiveTutor.Api.Helpers
     {
         public static User GetExistingUser(IProviderRequest request, UserRepository userRepository)
         {
-            var existingUser = new User();
-            if (string.IsNullOrWhiteSpace(request.Provider) == false && string.IsNullOrWhiteSpace(request.ProviderId))
+            User existingUser = null;
+            if (string.IsNullOrWhiteSpace(request.Provider) == false && string.IsNullOrWhiteSpace(request.ProviderId) == false)
             {
                 try
                 {
@@ -22,7 +22,7 @@ namespace MetacognitiveTutor.Api.Helpers
                 }
             }
 
-            return existingUser;
+            return existingUser ?? new User();
         }
     }
 }

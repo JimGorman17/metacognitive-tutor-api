@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Guard.cs" />
+    <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Helpers\UserHelpers.cs" />
     <Compile Include="Interfaces\IProviderRequest.cs" />
     <Compile Include="Services\ErrorLogService.cs" />

@@ -16,7 +16,7 @@ namespace MetacognitiveTutor.DataLayer.Models
         public string ProviderId { get; set; }
         public string ProviderPic { get; set; }
         // [ResultColumn] public DateTime CreateDateUtc { get; set; } // Not a UI concern for now.
-        public DateTime UpdateDateUtc { get; set; }
+        public DateTime? UpdateDateUtc { get; set; }
         public bool IsTeacher { get; set; }
         public bool IsStudent { get; set; }
 

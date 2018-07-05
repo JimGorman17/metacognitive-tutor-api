@@ -55,14 +55,18 @@ namespace MetacognitiveTutor.Api.Services
                     existingUser.IsTeacher == false && request.IsTeacher ||
                     existingUser.IsStudent == false && request.IsStudent ||
                     existingUser.Name.Equals(request.Name, StringComparison.Ordinal) == false ||
-                    existingUser.ProviderPic.Equals(request.ProviderPic, StringComparison.Ordinal) == false ||
-                    existingUser.Token.Equals(request.Token, StringComparison.Ordinal) == false)
+                    existingUser.ProviderPic.GetUntilOrEmpty("&ext=").Equals(request.ProviderPic.GetUntilOrEmpty("&ext="), StringComparison.Ordinal) == false)
                 {
                     existingUser.Email = request.Email;
                     existingUser.IsTeacher = existingUser.IsTeacher || request.IsTeacher;
                     existingUser.IsStudent = existingUser.IsStudent || request.IsStudent;
                     existingUser.Name = request.Name;
                     existingUser.ProviderPic = request.ProviderPic;
+                    existingUser.UpdateDateUtc = DateTime.UtcNow;
+                    UserRepository.Update(existingUser);
+                }
+                else if (existingUser.Token.Equals(request.Token, StringComparison.Ordinal) == false)
+                {
                     existingUser.Token = request.Token;
                     existingUser.UpdateDateUtc = DateTime.UtcNow;
                     UserRepository.Update(existingUser);

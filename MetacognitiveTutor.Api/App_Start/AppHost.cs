@@ -9,6 +9,12 @@ using ServiceStack.ServiceInterface.ServiceModel;
 using System.Net;
 using ServiceStack.Text;
 using ServiceStack;
+using ServiceStack.Common.Web;
+using ServiceStack.ServiceInterface.Cors;
+using ServiceStack.WebHost.Endpoints.Support;
+using System.Web;
+using System;
+using ServiceStack.WebHost.Endpoints.Extensions;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(MetacognitiveTutor.Api.App_Start.AppHost), "Start")]
 
@@ -28,16 +34,31 @@ namespace MetacognitiveTutor.Api.App_Start
 
 		public override void Configure(Container container)
 		{
-			//Set JSON web services to return idiomatic JSON camelCase properties
-			ServiceStack.Text.JsConfig.EmitCamelCaseNames = true;
-		
-            Plugins.Add(new ServiceStack.ServiceInterface.Cors.CorsFeature());
+            //Set JSON web services to return idiomatic JSON camelCase properties
+		    JsConfig.EmitCamelCaseNames = true;
+            JsConfig.ThrowOnDeserializationError = true;
+		    JsConfig.DateHandler = JsonDateHandler.ISO8601;
+		    JsConfig<Guid>.SerializeFn = guid => guid.ToString("D");
+		    JsConfig<Guid?>.SerializeFn = nullableGuid => nullableGuid.HasValue ? nullableGuid.Value.ToString("D") : string.Empty;
 
-            //Uncomment to change the default ServiceStack configuration
-            //SetConfig(new EndpointHostConfig {
-            //});
+		    Plugins.Add(new CorsFeature("*", "GET, POST, PUT, DELETE, OPTIONS", "Content-Type, G4SSessionGuid, G4SApiToken, G4SIdentitySessionGuid"));
 
-		    container.Register(c => new Database("localDB")).ReusedWithin(ReuseScope.Request);
+		    //Handles Request and closes Response after emitting global HTTP Headers
+		    var emitGlobalHeadersHandler = new CustomActionHandler(
+		        (httpReq, httpRes) => httpRes.EndRequest());
+
+		    SetConfig(new EndpointHostConfig
+		    {
+		        RawHttpHandlers = { httpReq =>
+		            httpReq.HttpMethod == HttpMethods.Options
+		                ? emitGlobalHeadersHandler
+		                : null  }
+#if !DEBUG
+                , DebugMode = false   // Remove stacktrace inside the response
+#endif
+		    });
+            
+            container.Register(c => new Database("localDB")).ReusedWithin(ReuseScope.Request);
 		    container.RegisterAutoWired<Repository<ErrorLog>>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<UserRepository>().ReusedWithin(ReuseScope.Request);
             
@@ -109,4 +130,36 @@ namespace MetacognitiveTutor.Api.App_Start
 			new AppHost().Init();
 		}
 	}
+
+    public class CustomActionHandler : IServiceStackHttpHandler, IHttpHandler
+    {
+        public Action<IHttpRequest, IHttpResponse> Action { get; set; }
+
+        public CustomActionHandler(Action<IHttpRequest, IHttpResponse> action)
+        {
+            if (action == null)
+            {
+                throw new Exception("Action was not supplied to ActionHandler");
+            }
+
+            Action = action;
+        }
+
+        public void ProcessRequest(IHttpRequest httpReq, IHttpResponse httpRes, string operationName)
+        {
+            Action(httpReq, httpRes);
+        }
+
+        public void ProcessRequest(HttpContext context)
+        {
+            ProcessRequest(context.Request.ToRequest(GetType().Name),
+                context.Response.ToResponse(),
+                GetType().Name);
+        }
+
+        public bool IsReusable
+        {
+            get { return false; }
+        }
+    }
 }
