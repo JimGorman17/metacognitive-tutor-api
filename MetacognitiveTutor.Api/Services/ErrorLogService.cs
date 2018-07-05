@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetacognitiveTutor.Api.Helpers;
+using MetacognitiveTutor.Api.Interfaces;
 using MetacognitiveTutor.DataLayer.Models;
 using MetacognitiveTutor.DataLayer.Repositories;
 using ServiceStack.ServiceHost;
@@ -6,37 +7,34 @@ using ServiceStack.ServiceInterface;
 
 namespace MetacognitiveTutor.Api.Services
 {
+    // ReSharper disable once UnusedMember.Global
     public class ErrorLogService : Service
     {
         public Repository<ErrorLog> ErrorLogRepository { get; set; }
         public UserRepository UserRepository { get; set; }
 
-        [Route("/ErrorLog/Create", "POST")]
-        public class ErrorLogCreateRequest : IReturnVoid
+        [Route("/error-log/create", "POST")]
+        public class ErrorLogCreateRequest : IProviderRequest, IReturnVoid
         {
+            [ApiMember(IsRequired = true)]
             public string Application { get; set; }
+            [ApiMember(IsRequired = true)]
             public string Provider { get; set; }
+            [ApiMember(IsRequired = true)]
             public string ProviderId { get; set; }
             public string ErrorMessage { get; set; }
             public string StackTrace { get; set; }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void Post(ErrorLogCreateRequest request)
         {
-            var existingUser = new User();
+            Guard.AgainstEmpty(request.Application);
+            Guard.AgainstEmpty(request.Provider);
+            Guard.AgainstEmpty(request.ProviderId);
+            Guard.IsTrue(r => string.IsNullOrWhiteSpace(r.ErrorMessage) == false || string.IsNullOrWhiteSpace(r.StackTrace), request);
 
-            if (string.IsNullOrWhiteSpace(request.Provider) == false && string.IsNullOrWhiteSpace(request.ProviderId))
-            {
-                try
-                {
-                    existingUser = UserRepository.GetUserByProviderAndProviderId(request.Provider, request.ProviderId);
-                }
-                // ReSharper disable EmptyGeneralCatchClause
-                catch
-                    // ReSharper restore EmptyGeneralCatchClause
-                {
-                }
-            }
+            var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
 
             ErrorLogRepository.Add(new ErrorLog
             {
@@ -46,6 +44,5 @@ namespace MetacognitiveTutor.Api.Services
                 UserId = 0 < existingUser.Id ? existingUser.Id : (int?)null
             });
         }
-
     }
 }
