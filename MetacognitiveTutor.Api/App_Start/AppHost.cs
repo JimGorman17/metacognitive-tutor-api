@@ -42,7 +42,7 @@ namespace MetacognitiveTutor.Api.App_Start
 		    JsConfig<Guid>.SerializeFn = guid => guid.ToString("D");
 		    JsConfig<Guid?>.SerializeFn = nullableGuid => nullableGuid.HasValue ? nullableGuid.Value.ToString("D") : string.Empty;
 
-		    Plugins.Add(new CorsFeature(ConfigurationManager.AppSettings["webSiteDomain"], "GET, POST, PUT, DELETE, OPTIONS", "Content-Type, G4SSessionGuid, G4SApiToken, G4SIdentitySessionGuid"));
+		    Plugins.Add(new CorsFeature(ConfigurationManager.AppSettings["webSiteDomain"], "GET, POST, PUT, DELETE, OPTIONS", "Content-Type"));
 
 		    //Handles Request and closes Response after emitting global HTTP Headers
 		    var emitGlobalHeadersHandler = new CustomActionHandler(
