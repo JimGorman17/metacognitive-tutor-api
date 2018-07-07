@@ -98,16 +98,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\js\ss-validation.js" />
-    <Content Include="default.htm" />
-    <Content Include="jqunback-1.51.min.js" />
-    <Content Include="README.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Guard.cs" />
+    <Compile Include="Helpers\StringHelpers.cs" />
+    <Compile Include="Helpers\UserHelpers.cs" />
+    <Compile Include="Interfaces\IProviderRequest.cs" />
+    <Compile Include="Services\ErrorLogService.cs" />
+    <Compile Include="Services\HttpStatusResult.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="App_Start\AppHost.cs" />
-    <Compile Include="App_Start\PageBase.cs" />
-    <Compile Include="App_Start\WebServiceExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +119,12 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetacognitiveTutor.DataLayer\MetacognitiveTutor.DataLayer.csproj">
+      <Project>{ad92ac51-335e-487d-8534-d56e1e610f7b}</Project>
+      <Name>MetacognitiveTutor.DataLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
