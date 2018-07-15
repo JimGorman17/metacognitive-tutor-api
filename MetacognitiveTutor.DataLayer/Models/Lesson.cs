@@ -17,8 +17,8 @@ namespace MetacognitiveTutor.DataLayer.Models
         public string SupportingIdea { get; set; }
         public string StoryDetails { get; set; }
         public string ImportantSentencesForWordScramble { get; set; }
-        public string LessonAuthorProvider { get; set; }
-        public string LessonAuthorProviderId { get; set; }
+        public string Provider { get; set; }
+        public string ProviderId { get; set; }
         // [ResultColumn] public DateTime CreateDateUtc { get; set; } // Not a UI concern for now.
         public DateTime? UpdateDateUtc { get; set; }
         public bool IsDeleted { get; set; }
