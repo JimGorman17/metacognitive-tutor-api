@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using MetacognitiveTutor.Api.Dtos;
 using MetacognitiveTutor.Api.Helpers;
 using MetacognitiveTutor.Api.Interfaces;
 using MetacognitiveTutor.DataLayer.Models;
@@ -15,8 +18,15 @@ namespace MetacognitiveTutor.Api.Services
         public UserRepository UserRepository { get; set; }
         public LessonRepository LessonRepository { get; set; }
 
+        [Route("/lesson/getall", "POST")]
+        public class LessonGetAllRequest : IProviderRequest, IReturn<IEnumerable<LessonResponse>>
+        {
+            [ApiMember(IsRequired = true)] public string Provider { get; set; }
+            [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
+        }
+
         [Route("/lesson/upsert", "POST")]
-        public class LessonUpsertRequest : IProviderRequest, IReturn<int>
+        public class LessonUpsertRequest : IProviderRequest, IReturn<LessonResponse>
         {
             public int Id { get; set; }
             public string BookTitle { get; set; }
@@ -42,9 +52,32 @@ namespace MetacognitiveTutor.Api.Services
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
         }
 
+        public IEnumerable<LessonResponse> Post(LessonGetAllRequest request)
+        {
+            Guard.AgainstEmpty(request.Provider);
+            Guard.AgainstEmpty(request.ProviderId);
+            var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
+            Guard.IsTrue(eu => eu.IsNew == false, existingUser);
+
+            var allLessons = LessonRepository.GetAll();
+            return allLessons.Select(lesson => new LessonResponse // TODO: Use Automapper
+            {
+                Id = lesson.Id,
+                BookTitle = lesson.BookTitle,
+                BookAmazonUrl = lesson.BookAmazonUrl,
+                TheHookYouTubeVideo = lesson.TheHookYouTubeVideo,
+                TheTwoVocabularyWordsYouTubeVideo = lesson.TheTwoVocabularyWordsYouTubeVideo,
+                MainIdea = lesson.MainIdea,
+                SupportingIdea = lesson.SupportingIdea,
+                StoryDetails = lesson.StoryDetails,
+                StoryQuestions = lesson.StoryQuestions,
+                ImportantSentencesForWordScramble = lesson.ImportantSentencesForWordScramble,
+                LessonAuthor = existingUser
+            });
+        }
 
         // ReSharper disable once UnusedMember.Global
-        public int Post(LessonUpsertRequest request)
+        public LessonResponse Post(LessonUpsertRequest request)
         {
             Guard.AgainstEmpty(request.Provider);
             Guard.AgainstEmpty(request.ProviderId);
@@ -61,19 +94,19 @@ namespace MetacognitiveTutor.Api.Services
                 MainIdea = request.MainIdea,
                 SupportingIdea = request.SupportingIdea,
                 StoryDetails = request.StoryDetails,
+                StoryQuestions = request.StoryQuestions,
                 ImportantSentencesForWordScramble = request.ImportantSentencesForWordScramble,
-                LessonAuthorProvider = request.LessonAuthorProvider,
-                LessonAuthorProviderId = request.LessonAuthorProviderId
+                Provider = request.Provider,
+                ProviderId = request.ProviderId
             };
 
             if (lesson.IsNew)
             {
                 var newLesson = LessonRepository.Add(lesson);
-                return newLesson.Id;
             }
             else
             {
-                if (request.Provider != lesson.LessonAuthorProvider || request.ProviderId != lesson.LessonAuthorProviderId)
+                if (request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
                 {
                     throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
                 }
@@ -85,8 +118,23 @@ namespace MetacognitiveTutor.Api.Services
 
                 lesson.UpdateDateUtc = DateTime.UtcNow;
                 LessonRepository.Update(lesson);
-                return lesson.Id;
             }
+
+            // TODO: Use Automapper
+            return new LessonResponse
+            {
+                Id = lesson.Id,
+                BookTitle = lesson.BookTitle,
+                BookAmazonUrl = lesson.BookAmazonUrl,
+                TheHookYouTubeVideo = lesson.TheHookYouTubeVideo,
+                TheTwoVocabularyWordsYouTubeVideo = lesson.TheTwoVocabularyWordsYouTubeVideo,
+                MainIdea = lesson.MainIdea,
+                SupportingIdea = lesson.SupportingIdea,
+                StoryDetails = lesson.StoryDetails,
+                StoryQuestions = lesson.StoryQuestions,
+                ImportantSentencesForWordScramble = lesson.ImportantSentencesForWordScramble,
+                LessonAuthor = existingUser
+            };
         }
 
         // ReSharper disable once UnusedMember.Global
