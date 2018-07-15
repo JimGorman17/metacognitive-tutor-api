@@ -59,7 +59,7 @@ namespace MetacognitiveTutor.Api.Services
             var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
 
-            var allLessons = LessonRepository.GetAll();
+            var allLessons = LessonRepository.GetAllNonDeleted();
             return allLessons.Select(lesson => new LessonResponse // TODO: Use Automapper
             {
                 Id = lesson.Id,
