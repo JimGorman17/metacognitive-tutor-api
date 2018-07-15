@@ -26,10 +26,9 @@ namespace MetacognitiveTutor.Api.Services
             public string MainIdea { get; set; }
             public string SupportingIdea { get; set; }
             public string StoryDetails { get; set; }
+            public string StoryQuestions { get; set; }
             public string ImportantSentencesForWordScramble { get; set; }
-            public string LessonAuthorProvider { get; set; }
-            public string LessonAuthorProviderId { get; set; }
-
+            
             [ApiMember(IsRequired = true)] public string Provider { get; set; }
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
         }
@@ -105,7 +104,7 @@ namespace MetacognitiveTutor.Api.Services
                 return;
             }
 
-            if (request.Provider != lesson.LessonAuthorProvider || request.ProviderId != lesson.LessonAuthorProviderId)
+            if (request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
             {
                 throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
             }
