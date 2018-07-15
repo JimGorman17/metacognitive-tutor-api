@@ -61,6 +61,7 @@ namespace MetacognitiveTutor.Api.App_Start
             
             container.Register(c => new Database("localDB")).ReusedWithin(ReuseScope.Request);
 		    container.RegisterAutoWired<Repository<ErrorLog>>().ReusedWithin(ReuseScope.Request);
+		    container.RegisterAutoWired<Repository<Lesson>>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<UserRepository>().ReusedWithin(ReuseScope.Request);
             
             ServiceExceptionHandler = (req, request, exception) =>

@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{F8E86005-14F3-4191-9F3C-669CF89D7B49}"
 	ProjectSection(SolutionItems) = preProject
 		01.001.sql = 01.001.sql
+		01.002.sql = 01.002.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetacognitiveTutor.DataLayer", "MetacognitiveTutor.DataLayer\MetacognitiveTutor.DataLayer.csproj", "{AD92AC51-335E-487D-8534-D56E1E610F7B}"
