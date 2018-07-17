@@ -41,7 +41,8 @@ namespace MetacognitiveTutor.Api.Services
                 Application = request.Application,
                 Message = request.ErrorMessage,
                 StackTrace = request.StackTrace,
-                UserId = 0 < existingUser.Id ? existingUser.Id : (int?)null
+                Provider = existingUser.Provider,
+                ProviderId = existingUser.ProviderId
             });
         }
     }
