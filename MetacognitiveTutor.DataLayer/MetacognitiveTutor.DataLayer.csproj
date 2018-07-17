@@ -59,10 +59,12 @@
     </Compile>
     <Compile Include="Models\Lesson.cs" />
     <Compile Include="Models\PetaPoco.cs" />
+    <Compile Include="Models\StudentLessonAnswer.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\LessonRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\StudentLessonAnswerRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>

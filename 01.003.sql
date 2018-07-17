@@ -25,6 +25,14 @@ CREATE TABLE [dbo].[StudentLessonAnswers](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+/****** Object:  Index [IX_StudentLessonAnswers]    Script Date: 7/17/2018 7:41:34 AM ******/
+CREATE NONCLUSTERED INDEX [IX_StudentLessonAnswers] ON [dbo].[StudentLessonAnswers]
+(
+	[Provider] ASC,
+	[ProviderId] ASC,
+	[LessonId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
 ALTER TABLE [dbo].[StudentLessonAnswers] ADD  CONSTRAINT [DF_StudentLessonAnswers_CreateDateUtc]  DEFAULT (sysutcdatetime()) FOR [CreateDateUtc]
 GO
 ALTER TABLE [dbo].[StudentLessonAnswers]  WITH CHECK ADD  CONSTRAINT [FK_StudentLessonAnswers_Lessons] FOREIGN KEY([LessonId])
