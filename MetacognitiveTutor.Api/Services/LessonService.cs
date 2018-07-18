@@ -83,6 +83,7 @@ namespace MetacognitiveTutor.Api.Services
             Guard.AgainstEmpty(request.ProviderId);
             var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
+            Guard.IsTrue(eu => eu.IsTeacher, existingUser);
 
             var lesson = new Lesson
             {
@@ -145,14 +146,14 @@ namespace MetacognitiveTutor.Api.Services
             Guard.AgainstEmpty(request.ProviderId);
             var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
-
+            
             var lesson = LessonRepository.Find(request.Id);
             if (lesson == null)
             {
                 return;
             }
 
-            if (request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
+            if (existingUser.IsTeacher == false || request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
             {
                 throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
             }
