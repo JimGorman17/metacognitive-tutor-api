@@ -5,9 +5,9 @@ namespace MetacognitiveTutor.DataLayer.Repositories
 {
     public class StudentLessonAnswerRepository : Repository<StudentLessonAnswer>
     {
-        public List<StudentLessonAnswer> GetAllByProviderAndProviderIdAndLessonId(string provider, string providerId, int lessonId)
+        public List<StudentLessonAnswer> GetAllByProviderAndProviderId(string provider, string providerId)
         {
-            return Database.Fetch<StudentLessonAnswer>("WHERE (Provider = @0) AND (ProviderId = @1) AND (LessonId = @2)", provider, providerId, lessonId);
+            return Database.Fetch<StudentLessonAnswer>("WHERE (Provider = @0) AND (ProviderId = @1)", provider, providerId);
         }
 
         public List<StudentLessonAnswer> GetAllByLessonId(int lessonId)

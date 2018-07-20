@@ -17,15 +17,14 @@ namespace MetacognitiveTutor.Api.Services
         public StudentLessonAnswerRepository StudentLessonAnswerRepository { get; set; }
         public Repository<ErrorLog> ErrorLogRepository { get; set; }
 
-        [Route("/studentlessonanswer/get", "POST")]
+        [Route("/studentlessonanswer/for-student/getall", "POST")]
         public class StudentLessonAnswerGetRequest : IProviderRequest, IReturn<IEnumerable<StudentLessonAnswerResponse>>
         {
             [ApiMember(IsRequired = true)] public string Provider { get; set; }
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
-            [ApiMember(IsRequired = true)] public int LessonId { get; set; }
         }
 
-        [Route("/studentlessonanswer/getall", "POST")]
+        [Route("/studentlessonanswer/for-teacher/get-all-by-lessonid", "POST")]
         public class StudentLessonAnswerGetAllRequest : IProviderRequest, IReturn<IEnumerable<StudentLessonAnswerResponse>>
         {
             [ApiMember(IsRequired = true)] public string Provider { get; set; }
@@ -40,10 +39,9 @@ namespace MetacognitiveTutor.Api.Services
             Guard.AgainstEmpty(request.ProviderId);
             var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
-            Guard.GreaterThan(0, request.LessonId, "LessonId");
             Guard.IsTrue(eu => eu.IsStudent, existingUser);
 
-            var studentLessonAnswers = StudentLessonAnswerRepository.GetAllByProviderAndProviderIdAndLessonId(request.Provider, request.ProviderId, request.LessonId);
+            var studentLessonAnswers = StudentLessonAnswerRepository.GetAllByProviderAndProviderId(request.Provider, request.ProviderId);
             return studentLessonAnswers.Select(studentLessonAnswer => new StudentLessonAnswerResponse // TODO: Use Automapper
             {
                 Id = studentLessonAnswer.Id,
