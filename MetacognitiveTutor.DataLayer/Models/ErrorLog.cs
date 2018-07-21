@@ -13,7 +13,8 @@ namespace MetacognitiveTutor.DataLayer.Models
         public string Message { get; set; }
         public string StackTrace { get; set; }
         // [ResultColumn] public DateTime CreateDateUtc { get; set; } // Not a UI concern for now.
-        public int? UserId { get; set; }
+        public string Provider { get; set; }
+        public string ProviderId { get; set; }
 
         [Ignore]
         public bool IsNew => Id == default(int);

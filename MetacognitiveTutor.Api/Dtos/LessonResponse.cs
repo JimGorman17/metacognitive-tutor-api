@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MetacognitiveTutor.DataLayer.Models;
+﻿using MetacognitiveTutor.DataLayer.Models;
 
 namespace MetacognitiveTutor.Api.Dtos
 {

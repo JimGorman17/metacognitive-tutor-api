@@ -63,7 +63,8 @@ namespace MetacognitiveTutor.Api.App_Start
 		    container.RegisterAutoWired<Repository<ErrorLog>>().ReusedWithin(ReuseScope.Request);
 		    container.RegisterAutoWired<LessonRepository>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<UserRepository>().ReusedWithin(ReuseScope.Request);
-            
+            container.RegisterAutoWired<StudentLessonAnswerRepository>().ReusedWithin(ReuseScope.Request);
+
             ServiceExceptionHandler = (req, request, exception) =>
 		    {
 		        var errorLog = new ErrorLog
