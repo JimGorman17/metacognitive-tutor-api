@@ -1,4 +1,6 @@
-﻿namespace MetacognitiveTutor.Api.Dtos
+﻿using MetacognitiveTutor.DataLayer.Models;
+
+namespace MetacognitiveTutor.Api.Dtos
 {
     public class StudentLessonAnswerResponse
     {
@@ -8,5 +10,6 @@
         public int QuestionId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
+        public User Student { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace MetacognitiveTutor.Api.Services
         }
 
         [Route("/studentlessonanswer/upsert", "POST")]
-        public class StudentLessonAnswerUpsertRequest : IProviderRequest, IReturn<int>
+        public class StudentLessonAnswerUpsertRequest : IProviderRequest, IReturn<StudentLessonAnswerResponse>
         {
             public int Id { get; set; }
             [ApiMember(IsRequired = true)] public int LessonId { get; set; }
@@ -49,7 +49,7 @@ namespace MetacognitiveTutor.Api.Services
         }
 
         // ReSharper disable once UnusedMember.Global
-        public int Post(StudentLessonAnswerUpsertRequest request)
+        public StudentLessonAnswerResponse Post(StudentLessonAnswerUpsertRequest request)
         {
             Guard.AgainstEmpty(request.Provider);
             Guard.AgainstEmpty(request.ProviderId);
@@ -86,7 +86,17 @@ namespace MetacognitiveTutor.Api.Services
                 StudentLessonAnswerRepository.Update(studentLessonAnswer);
             }
 
-            return studentLessonAnswer.Id;
+            // TODO: Use Automapper
+            return new StudentLessonAnswerResponse
+            {
+                Id = studentLessonAnswer.Id,
+                LessonId = studentLessonAnswer.LessonId,
+                QuestionType = studentLessonAnswer.QuestionType,
+                QuestionId = studentLessonAnswer.QuestionId,
+                Question = studentLessonAnswer.Question,
+                Answer = studentLessonAnswer.Answer,
+                Student = existingUser
+            };
         }
 
         // ReSharper disable once UnusedMember.Global

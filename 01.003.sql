@@ -22,10 +22,18 @@ CREATE TABLE [dbo].[StudentLessonAnswers](
  CONSTRAINT [PK_StudentLessonAnswers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UK_StudentLessonAnswers] UNIQUE NONCLUSTERED 
+(
+	[Provider] ASC,
+	[ProviderId] ASC,
+	[LessonId] ASC,
+	[QuestionType] ASC,
+	[QuestionId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Index [IX_StudentLessonAnswers]    Script Date: 7/17/2018 7:41:34 AM ******/
+/****** Object:  Index [IX_StudentLessonAnswers]    Script Date: 7/21/2018 11:07:41 AM ******/
 CREATE NONCLUSTERED INDEX [IX_StudentLessonAnswers] ON [dbo].[StudentLessonAnswers]
 (
 	[Provider] ASC,
