@@ -52,6 +52,7 @@ namespace MetacognitiveTutor.Api.Services
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public IEnumerable<LessonResponse> Post(LessonGetAllRequest request)
         {
             Guard.AgainstEmpty(request.Provider);
@@ -103,7 +104,7 @@ namespace MetacognitiveTutor.Api.Services
 
             if (lesson.IsNew)
             {
-                var newLesson = LessonRepository.Add(lesson);
+                LessonRepository.Add(lesson);
             }
             else
             {

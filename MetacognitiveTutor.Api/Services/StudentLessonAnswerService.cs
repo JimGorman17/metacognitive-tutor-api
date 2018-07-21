@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 using MetacognitiveTutor.Api.Dtos;
 using MetacognitiveTutor.Api.Helpers;
 using MetacognitiveTutor.Api.Interfaces;
 using MetacognitiveTutor.DataLayer.Models;
 using MetacognitiveTutor.DataLayer.Repositories;
+using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
@@ -24,12 +26,67 @@ namespace MetacognitiveTutor.Api.Services
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
         }
 
+        [Route("/studentlessonanswer/upsert", "POST")]
+        public class StudentLessonAnswerUpsertRequest : IProviderRequest, IReturn<int>
+        {
+            public int Id { get; set; }
+            [ApiMember(IsRequired = true)] public int LessonId { get; set; }
+            [ApiMember(IsRequired = true)] public string QuestionType { get; set; }
+            public int QuestionId { get; set; }
+            public string Question { get; set; }
+            public string Answer { get; set; }
+
+            [ApiMember(IsRequired = true)] public string Provider { get; set; }
+            [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
+        }
+
         [Route("/studentlessonanswer/for-teacher/get-all-by-lessonid", "POST")]
         public class StudentLessonAnswerGetAllRequest : IProviderRequest, IReturn<IEnumerable<StudentLessonAnswerResponse>>
         {
             [ApiMember(IsRequired = true)] public string Provider { get; set; }
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
             [ApiMember(IsRequired = true)] public int LessonId { get; set; }
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public int Post(StudentLessonAnswerUpsertRequest request)
+        {
+            Guard.AgainstEmpty(request.Provider);
+            Guard.AgainstEmpty(request.ProviderId);
+            Guard.IsTrue(li => 0 < li, request.LessonId);
+            Guard.AgainstEmpty(request.QuestionType);
+            var existingUser = UserHelpers.GetExistingUser(request, UserRepository);
+            Guard.IsTrue(eu => eu.IsNew == false, existingUser);
+            Guard.IsTrue(eu => eu.IsStudent, existingUser);
+
+            var studentLessonAnswer = new StudentLessonAnswer
+            {
+                Id = request.Id,
+                Provider = request.Provider,
+                ProviderId = request.ProviderId,
+                LessonId = request.LessonId,
+                QuestionType = request.QuestionType,
+                QuestionId = request.QuestionId,
+                Question = request.Question,
+                Answer = request.Answer
+            };             
+
+            if (studentLessonAnswer.IsNew)
+            {
+                StudentLessonAnswerRepository.Add(studentLessonAnswer);
+            }
+            else
+            {
+                if (request.Provider != studentLessonAnswer.Provider || request.ProviderId != studentLessonAnswer.ProviderId)
+                {
+                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+                }
+
+                studentLessonAnswer.UpdateDateUtc = DateTime.UtcNow;
+                StudentLessonAnswerRepository.Update(studentLessonAnswer);
+            }
+
+            return studentLessonAnswer.Id;
         }
 
         // ReSharper disable once UnusedMember.Global
