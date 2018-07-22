@@ -7,6 +7,7 @@ using MetacognitiveTutor.Api.Helpers;
 using MetacognitiveTutor.Api.Interfaces;
 using MetacognitiveTutor.DataLayer.Models;
 using MetacognitiveTutor.DataLayer.Repositories;
+using MoreLinq.Extensions;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -61,6 +62,8 @@ namespace MetacognitiveTutor.Api.Services
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
 
             var allLessons = LessonRepository.GetAllNonDeleted();
+            var allAuthors = allLessons.DistinctBy(al => new {al.Provider, al.ProviderId}).Select(au => UserRepository.GetUserByProviderAndProviderId(au.Provider, au.ProviderId));
+
             return allLessons.Select(lesson => new LessonResponse // TODO: Use Automapper
             {
                 Id = lesson.Id,
@@ -73,7 +76,7 @@ namespace MetacognitiveTutor.Api.Services
                 StoryDetails = lesson.StoryDetails,
                 StoryQuestions = lesson.StoryQuestions,
                 ImportantSentencesForWordScramble = lesson.ImportantSentencesForWordScramble,
-                LessonAuthor = existingUser
+                LessonAuthor = allAuthors.Single(aa => aa.Provider == lesson.Provider && aa.ProviderId == lesson.ProviderId)
             });
         }
 
