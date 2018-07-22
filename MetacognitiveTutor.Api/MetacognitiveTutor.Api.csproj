@@ -107,6 +107,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\GradeResponse.cs" />
     <Compile Include="Dtos\GroupedStudentLessonAnswerResponse.cs" />
     <Compile Include="Dtos\LessonResponse.cs" />
     <Compile Include="Dtos\StudentLessonAnswerResponse.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Helpers\UserHelpers.cs" />
     <Compile Include="Interfaces\IProviderRequest.cs" />
     <Compile Include="Services\ErrorLogService.cs" />
+    <Compile Include="Services\GradeService.cs" />
     <Compile Include="Services\HttpStatusResult.cs" />
     <Compile Include="Services\LessonService.cs" />
     <Compile Include="Services\StudentLessonAnswerService.cs" />

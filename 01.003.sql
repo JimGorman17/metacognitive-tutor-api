@@ -73,6 +73,15 @@ CREATE TABLE [dbo].[Grades](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+/****** Object:  Index [IX_Grades]    Script Date: 7/22/2018 3:24:31 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Grades] ON [dbo].[Grades]
+(
+	[LessonId] ASC,
+	[StudentProvider] ASC,
+	[StudentProviderId] ASC,
+	[IsDeleted] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
 ALTER TABLE [dbo].[Grades] ADD  CONSTRAINT [DF_Grades_CreateDateUtc]  DEFAULT (sysutcdatetime()) FOR [CreateDateUtc]
 GO
 ALTER TABLE [dbo].[Grades] ADD  CONSTRAINT [DF_Grades_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
