@@ -18,6 +18,7 @@ namespace MetacognitiveTutor.Api.Services
         public UserRepository UserRepository { get; set; }
         public StudentLessonAnswerRepository StudentLessonAnswerRepository { get; set; }
         public GradeRepository GradeRepository { get; set; }
+        public LessonRepository LessonRepository { get; set; }
         public Repository<ErrorLog> ErrorLogRepository { get; set; }
 
         [Route("/studentlessonanswer/for-student/getall", "POST")]
@@ -130,6 +131,12 @@ namespace MetacognitiveTutor.Api.Services
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
             Guard.GreaterThan(0, request.LessonId, "LessonId");
             Guard.IsTrue(eu => eu.IsTeacher, existingUser);
+
+            var lesson = LessonRepository.Find(request.LessonId);
+            if (request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
+            {
+                throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+            }
 
             var studentLessonAnswers = StudentLessonAnswerRepository.GetAllByLessonId(request.LessonId);
             var groupedStudentLessonAnswers = studentLessonAnswers.GroupBy(g => new { g.Provider, g.ProviderId }).ToList();
