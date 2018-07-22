@@ -5,6 +5,7 @@ namespace MetacognitiveTutor.Api.Dtos
     public class GroupedStudentLessonAnswerResponse
     {
         public int LessonId { get; set; }
+        public string BookTitle { get; set; }
         public string Name { get; set; }
         public string Provider { get; set; }
         public string ProviderId { get; set; }

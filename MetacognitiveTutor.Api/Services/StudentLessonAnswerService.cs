@@ -162,6 +162,7 @@ namespace MetacognitiveTutor.Api.Services
                 response.Add(new GroupedStudentLessonAnswerResponse
                 {
                     LessonId = request.LessonId,
+                    BookTitle = lesson.BookTitle,
                     Name = student.Name,
                     Provider = student.Provider,
                     ProviderId = student.ProviderId,
