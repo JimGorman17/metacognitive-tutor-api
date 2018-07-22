@@ -76,7 +76,8 @@ namespace MetacognitiveTutor.Api.Services
                 StoryDetails = lesson.StoryDetails,
                 StoryQuestions = lesson.StoryQuestions,
                 ImportantSentencesForWordScramble = lesson.ImportantSentencesForWordScramble,
-                LessonAuthor = allAuthors.Single(aa => aa.Provider == lesson.Provider && aa.ProviderId == lesson.ProviderId)
+                LessonAuthor = allAuthors.Single(aa => aa.Provider == lesson.Provider && aa.ProviderId == lesson.ProviderId),
+                NumberOfEnrolledStudents = lesson.NumberOfEnrolledStudents
             });
         }
 

@@ -15,5 +15,6 @@ namespace MetacognitiveTutor.Api.Dtos
         public string StoryQuestions { get; set; }
         public string ImportantSentencesForWordScramble { get; set; }
         public User LessonAuthor { get; set; }
+        public int NumberOfEnrolledStudents { get; set; }
     }
 }
