@@ -2,6 +2,7 @@
 
 namespace MetacognitiveTutor.Api.Services
 {
+    // ReSharper disable once UnusedMember.Global
     public class HttpStatusResult
     {
         private readonly HttpStatusCode _httpStatusCode;
@@ -10,7 +11,9 @@ namespace MetacognitiveTutor.Api.Services
             _httpStatusCode = httpStatusCode;
         }
 
+        // ReSharper disable once UnusedMember.Global
         public int HttpStatusCode => (int)_httpStatusCode;
+        // ReSharper disable once UnusedMember.Global
         public string Message => _httpStatusCode.ToString();
     }
 }

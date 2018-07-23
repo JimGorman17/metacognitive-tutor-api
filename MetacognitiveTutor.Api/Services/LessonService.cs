@@ -14,6 +14,7 @@ using ServiceStack.ServiceInterface;
 
 namespace MetacognitiveTutor.Api.Services
 {
+    // ReSharper disable once UnusedMember.Global
     public class LessonService : Service
     {
         public UserRepository UserRepository { get; set; }

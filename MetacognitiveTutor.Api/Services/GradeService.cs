@@ -35,6 +35,10 @@ namespace MetacognitiveTutor.Api.Services
             [ApiMember(IsRequired = true, Description = "Refers to the teacher submitting the grade.")] public string ProviderId { get; set; }
         }
 
+        public void Post(GradeUpsertRequest request)
+        {
+        }
+
         // ReSharper disable once UnusedMember.Global
         public void Delete(LessonDeleteRequest request)
         {
