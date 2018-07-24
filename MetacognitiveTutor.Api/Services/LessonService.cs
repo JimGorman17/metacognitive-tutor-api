@@ -7,16 +7,19 @@ using MetacognitiveTutor.Api.Helpers;
 using MetacognitiveTutor.Api.Interfaces;
 using MetacognitiveTutor.DataLayer.Models;
 using MetacognitiveTutor.DataLayer.Repositories;
+using MoreLinq.Extensions;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
 namespace MetacognitiveTutor.Api.Services
 {
+    // ReSharper disable once UnusedMember.Global
     public class LessonService : Service
     {
         public UserRepository UserRepository { get; set; }
         public LessonRepository LessonRepository { get; set; }
+        public GradeRepository GradeRepository { get; set; }
 
         [Route("/lesson/getall", "POST")]
         public class LessonGetAllRequest : IProviderRequest, IReturn<IEnumerable<LessonResponse>>
@@ -61,19 +64,25 @@ namespace MetacognitiveTutor.Api.Services
             Guard.IsTrue(eu => eu.IsNew == false, existingUser);
 
             var allLessons = LessonRepository.GetAllNonDeleted();
-            return allLessons.Select(lesson => new LessonResponse // TODO: Use Automapper
+            var allAuthors = allLessons.DistinctBy(al => new {al.Provider, al.ProviderId}).Select(au => UserRepository.GetUserByProviderAndProviderId(au.Provider, au.ProviderId));
+
+            return allLessons
+                .Select(lesson => new { Grade = existingUser.IsStudent ? GradeRepository.GetGrade(lesson.Id, request.Provider, request.ProviderId) : new GradeModel(), Lesson = lesson })
+                .Select(x => new LessonResponse // TODO: Use Automapper
             {
-                Id = lesson.Id,
-                BookTitle = lesson.BookTitle,
-                BookAmazonUrl = lesson.BookAmazonUrl,
-                TheHookYouTubeVideo = lesson.TheHookYouTubeVideo,
-                TheTwoVocabularyWordsYouTubeVideo = lesson.TheTwoVocabularyWordsYouTubeVideo,
-                MainIdea = lesson.MainIdea,
-                SupportingIdea = lesson.SupportingIdea,
-                StoryDetails = lesson.StoryDetails,
-                StoryQuestions = lesson.StoryQuestions,
-                ImportantSentencesForWordScramble = lesson.ImportantSentencesForWordScramble,
-                LessonAuthor = existingUser
+                Id = x.Lesson.Id,
+                BookTitle = x.Lesson.BookTitle,
+                BookAmazonUrl = x.Lesson.BookAmazonUrl,
+                TheHookYouTubeVideo = x.Lesson.TheHookYouTubeVideo,
+                TheTwoVocabularyWordsYouTubeVideo = x.Lesson.TheTwoVocabularyWordsYouTubeVideo,
+                MainIdea = x.Lesson.MainIdea,
+                SupportingIdea = x.Lesson.SupportingIdea,
+                StoryDetails = x.Lesson.StoryDetails,
+                StoryQuestions = x.Lesson.StoryQuestions,
+                ImportantSentencesForWordScramble = x.Lesson.ImportantSentencesForWordScramble,
+                LessonAuthor = allAuthors.Single(aa => aa.Provider == x.Lesson.Provider && aa.ProviderId == x.Lesson.ProviderId),
+                NumberOfEnrolledStudents = x.Lesson.NumberOfEnrolledStudents,
+                GradeResponse = x.Grade == null ? new GradeResponse() : new GradeResponse { IsGraded = true, Grade = x.Grade.Grade, Comments = x.Grade.Comments }
             });
         }
 

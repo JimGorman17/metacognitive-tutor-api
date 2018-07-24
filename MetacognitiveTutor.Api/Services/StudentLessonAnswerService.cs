@@ -13,10 +13,13 @@ using ServiceStack.ServiceInterface;
 
 namespace MetacognitiveTutor.Api.Services
 {
+    // ReSharper disable once UnusedMember.Global
     public class StudentLessonAnswerService : Service
     {
         public UserRepository UserRepository { get; set; }
         public StudentLessonAnswerRepository StudentLessonAnswerRepository { get; set; }
+        public GradeRepository GradeRepository { get; set; }
+        public LessonRepository LessonRepository { get; set; }
         public Repository<ErrorLog> ErrorLogRepository { get; set; }
 
         [Route("/studentlessonanswer/for-student/getall", "POST")]
@@ -41,7 +44,7 @@ namespace MetacognitiveTutor.Api.Services
         }
 
         [Route("/studentlessonanswer/for-teacher/get-all-by-lessonid", "POST")]
-        public class StudentLessonAnswerGetAllRequest : IProviderRequest, IReturn<IEnumerable<StudentLessonAnswerResponse>>
+        public class StudentLessonAnswerGetAllRequest : IProviderRequest, IReturn<IEnumerable<GroupedStudentLessonAnswerResponse>>
         {
             [ApiMember(IsRequired = true)] public string Provider { get; set; }
             [ApiMember(IsRequired = true)] public string ProviderId { get; set; }
@@ -130,6 +133,12 @@ namespace MetacognitiveTutor.Api.Services
             Guard.GreaterThan(0, request.LessonId, "LessonId");
             Guard.IsTrue(eu => eu.IsTeacher, existingUser);
 
+            var lesson = LessonRepository.Find(request.LessonId);
+            if (request.Provider != lesson.Provider || request.ProviderId != lesson.ProviderId)
+            {
+                throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+            }
+
             var studentLessonAnswers = StudentLessonAnswerRepository.GetAllByLessonId(request.LessonId);
             var groupedStudentLessonAnswers = studentLessonAnswers.GroupBy(g => new { g.Provider, g.ProviderId }).ToList();
             var allStudents = groupedStudentLessonAnswers.Select(g => UserRepository.GetUserByProviderAndProviderId(g.Key.Provider, g.Key.ProviderId)).ToList();
@@ -150,8 +159,11 @@ namespace MetacognitiveTutor.Api.Services
                     continue;
                 }
 
+                var grade = GradeRepository.GetGrade(request.LessonId, student.Provider, student.ProviderId);
                 response.Add(new GroupedStudentLessonAnswerResponse
                 {
+                    LessonId = request.LessonId,
+                    BookTitle = lesson.BookTitle,
                     Name = student.Name,
                     Provider = student.Provider,
                     ProviderId = student.ProviderId,
@@ -164,7 +176,8 @@ namespace MetacognitiveTutor.Api.Services
                         QuestionId = g.QuestionId,
                         Question = g.Question,
                         Answer = g.Answer
-                    })
+                    }),
+                    GradeResponse = grade == null ? new GradeResponse { IsGraded = false } : new GradeResponse { IsGraded = true, Comments = grade.Comments, Grade = grade.Grade }
                 });
             }
 
