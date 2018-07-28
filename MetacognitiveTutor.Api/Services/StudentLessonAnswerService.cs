@@ -176,7 +176,7 @@ namespace MetacognitiveTutor.Api.Services
                         QuestionId = g.QuestionId,
                         Question = g.Question,
                         Answer = g.Answer
-                    }),
+                    }).OrderByDescending(sla => sla.QuestionType.Equals("card_pyramid", StringComparison.OrdinalIgnoreCase)).ThenByDescending(sla => sla.QuestionType.Equals("word_scramble", StringComparison.OrdinalIgnoreCase)),
                     GradeResponse = grade == null ? new GradeResponse { IsGraded = false } : new GradeResponse { IsGraded = true, Comments = grade.Comments, Grade = grade.Grade }
                 });
             }
