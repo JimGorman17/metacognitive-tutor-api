@@ -23,6 +23,8 @@ namespace MetacognitiveTutor.DataLayer.Repositories
                     , "BookAmazonUrl"
                     , "TheHookYouTubeVideo"
                     , "TheTwoVocabularyWordsYouTubeVideo"
+                    , "EnunciationVideo1"
+                    , "EnunciationVideo2"
                     , "MainIdea"
                     , "SupportingIdea"
                     , "StoryDetails"

@@ -9,6 +9,8 @@ namespace MetacognitiveTutor.Api.Dtos
         public string BookAmazonUrl { get; set; }
         public string TheHookYouTubeVideo { get; set; }
         public string TheTwoVocabularyWordsYouTubeVideo { get; set; }
+        public string EnunciationVideo1 { get; set; }
+        public string EnunciationVideo2 { get; set; }
         public string MainIdea { get; set; }
         public string SupportingIdea { get; set; }
         public string StoryDetails { get; set; }
