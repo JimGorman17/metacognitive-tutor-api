@@ -8,6 +8,10 @@ ALTER TABLE [dbo].[ErrorLogs]
 	ADD	[Provider] [varchar](30) NULL,
 		[ProviderId] [varchar](300) NULL;
 
+ALTER TABLE [dbo].[Lessons]
+	ADD [EnunciationVideo1] [nvarchar](max) NULL,
+		[EnunciationVideo2] [nvarchar](max) NULL;
+
 CREATE TABLE [dbo].[StudentLessonAnswers](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Provider] [varchar](30) NOT NULL,

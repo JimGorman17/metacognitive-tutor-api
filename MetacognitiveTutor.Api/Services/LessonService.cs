@@ -36,6 +36,8 @@ namespace MetacognitiveTutor.Api.Services
             public string BookAmazonUrl { get; set; }
             public string TheHookYouTubeVideo { get; set; }
             public string TheTwoVocabularyWordsYouTubeVideo { get; set; }
+            public string EnunciationVideo1 { get; set; }
+            public string EnunciationVideo2 { get; set; }
             public string MainIdea { get; set; }
             public string SupportingIdea { get; set; }
             public string StoryDetails { get; set; }
@@ -75,6 +77,8 @@ namespace MetacognitiveTutor.Api.Services
                 BookAmazonUrl = x.Lesson.BookAmazonUrl,
                 TheHookYouTubeVideo = x.Lesson.TheHookYouTubeVideo,
                 TheTwoVocabularyWordsYouTubeVideo = x.Lesson.TheTwoVocabularyWordsYouTubeVideo,
+                EnunciationVideo1 = x.Lesson.EnunciationVideo1,
+                EnunciationVideo2 = x.Lesson.EnunciationVideo2,
                 MainIdea = x.Lesson.MainIdea,
                 SupportingIdea = x.Lesson.SupportingIdea,
                 StoryDetails = x.Lesson.StoryDetails,
@@ -102,6 +106,8 @@ namespace MetacognitiveTutor.Api.Services
                 BookAmazonUrl = request.BookAmazonUrl,
                 TheHookYouTubeVideo = request.TheHookYouTubeVideo,
                 TheTwoVocabularyWordsYouTubeVideo = request.TheTwoVocabularyWordsYouTubeVideo,
+                EnunciationVideo1 = request.EnunciationVideo1,
+                EnunciationVideo2 = request.EnunciationVideo2,
                 MainIdea = request.MainIdea,
                 SupportingIdea = request.SupportingIdea,
                 StoryDetails = request.StoryDetails,
@@ -139,6 +145,8 @@ namespace MetacognitiveTutor.Api.Services
                 BookAmazonUrl = lesson.BookAmazonUrl,
                 TheHookYouTubeVideo = lesson.TheHookYouTubeVideo,
                 TheTwoVocabularyWordsYouTubeVideo = lesson.TheTwoVocabularyWordsYouTubeVideo,
+                EnunciationVideo1 = lesson.EnunciationVideo1,
+                EnunciationVideo2 = lesson.EnunciationVideo2,
                 MainIdea = lesson.MainIdea,
                 SupportingIdea = lesson.SupportingIdea,
                 StoryDetails = lesson.StoryDetails,
